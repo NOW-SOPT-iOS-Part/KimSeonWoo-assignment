@@ -18,11 +18,11 @@ class NickNameView: UIView {
     }
     
     lazy var saveButton = UIButton().then {
-        $0.setButtonBorder(radius: 5, borderWidht: 1, borderColor: UIColor.gray2.cgColor)
+        $0.backgroundColor = .red
+        $0.layer.cornerRadius = 3
         $0.setTitle("저장하기", for: .normal)
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = .pretendedRegularFont(ofSize: 14)
-        $0.backgroundColor = .red
     }
     
     var nickNameTextField = UITextField().then {
@@ -30,6 +30,7 @@ class NickNameView: UIView {
         $0.backgroundColor = .gray2
         $0.layer.cornerRadius = 3
         $0.setLeftPaddingPoints(15)
+        $0.becomeFirstResponder()
     }
     
     required init?(coder: NSCoder) {
@@ -42,6 +43,14 @@ class NickNameView: UIView {
         setHierarchy()
         setLayout()
         setStyle()
+    }
+    
+    private func setHierarchy() {
+        self.addSubViews([titleLabel, saveButton, nickNameTextField])
+    }
+    
+    private func setStyle() {
+        self.backgroundColor = .white
     }
     
     private func setLayout() {
@@ -65,13 +74,6 @@ class NickNameView: UIView {
         }
     }
     
-    private func setHierarchy() {
-        self.addSubViews([titleLabel, saveButton, nickNameTextField])
-    }
-    
-    private func setStyle() {
-        self.backgroundColor = .white
-    }
 }
 
 

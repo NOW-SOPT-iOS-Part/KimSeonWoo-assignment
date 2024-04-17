@@ -23,12 +23,12 @@ class NickNameViewController: UIViewController {
         
         setHierarchy()
         setLayout()
+        setStyle()
         configTarget()
     }
     
     private func setHierarchy() {
-        self.view.addSubview(nickNameView)
-        view.roundCorners(cornerRadius: 15, maskedCorners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
+        view.addSubview(nickNameView)
     }
     
     private func setLayout() {
@@ -41,6 +41,12 @@ class NickNameViewController: UIViewController {
         nickNameView.saveButton.addTarget(self,
                                               action: #selector(saveButtonTapped),
                                               for: .touchUpInside)
+    }
+    
+    private func setStyle() {
+        view.roundCorners(cornerRadius: 15, maskedCorners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
+        let tapGesture = UITapGestureRecognizer(target: self.view, action: #selector(self.view.endEditing(_:)))
+        self.view.addGestureRecognizer(tapGesture)
     }
 }
 

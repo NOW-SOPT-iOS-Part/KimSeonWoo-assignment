@@ -10,6 +10,7 @@ import SnapKit
 import Then
 
 class LoginView: UIView {
+    
     private let titleLabel = UILabel().then {
         $0.font = .pretendedMediumFont(ofSize: 23)
         $0.textColor = .gray84
@@ -55,10 +56,12 @@ class LoginView: UIView {
     
     lazy var showPasswordButton = UIButton().then {
         $0.setImage(.eyeSlash, for: .normal)
+        $0.isHidden = true
     }
     
     lazy var removePassWordButton = UIButton().then {
         $0.setImage(.xCircle, for: .normal)
+        $0.isHidden = true
     }
     
     private let divideView = UIView().then {
@@ -87,7 +90,6 @@ class LoginView: UIView {
         
         setHierarchy()
         setLayout()
-        setStyle()
     }
     
     private func setLayout() {
@@ -162,7 +164,5 @@ class LoginView: UIView {
         
         passwordTextField.addSubViews([showPasswordButton, removePassWordButton])
     }
-    
-    private func setStyle() {}
 }
 

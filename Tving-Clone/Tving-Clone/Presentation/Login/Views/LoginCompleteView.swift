@@ -22,9 +22,10 @@ class LoginCompleteView: UIView {
     private let logoImage = UIImageView(image: .logo)
     
     lazy var nextButton = UIButton().then {
-        $0.setButtonBorder(radius: 3, borderWidht: 1, borderColor: UIColor.gray2.cgColor)
+        $0.backgroundColor = .red
+        $0.layer.cornerRadius = 3
         $0.setTitle("메인으로", for: .normal)
-        $0.setTitleColor(.gray2, for: .normal)
+        $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = .pretendedRegularFont(ofSize: 14)
     }
     
@@ -37,7 +38,10 @@ class LoginCompleteView: UIView {
         
         setHierarchy()
         setLayout()
-        setStyle()
+    }
+    
+    private func setHierarchy() {
+        self.addSubViews([welcomeLabel, logoImage, nextButton])
     }
     
     private func setLayout() {
@@ -58,12 +62,5 @@ class LoginCompleteView: UIView {
             $0.centerX.equalToSuperview()
         }
     }
-    
-    private func setHierarchy() {
-        self.addSubViews([welcomeLabel, logoImage, nextButton])
-    }
-    
-    private func setStyle() {}
-    
 }
 

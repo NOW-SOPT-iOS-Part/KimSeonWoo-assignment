@@ -10,6 +10,7 @@ import SnapKit
 import Then
 
 class LoginCompleteViewController: UIViewController {
+    
     private let loginCompleteView = LoginCompleteView()
     
     override func viewDidLoad() {
@@ -39,7 +40,7 @@ class LoginCompleteViewController: UIViewController {
     }
     
     func bindData(nickName: String) {
-        loginCompleteView.welcomeLabel.text = "\(nickName)님 안녕하세요!"
+        loginCompleteView.welcomeLabel.text = "\(nickName)님\n반가워요!"
     }
 }
 

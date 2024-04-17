@@ -13,7 +13,7 @@ class LoginViewController: UIViewController {
     
     private let loginView = LoginView()
     private var isEnabled = false
-    private var nickName: String = "rla"
+    private var nickName: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,10 +21,8 @@ class LoginViewController: UIViewController {
         setHierarchy()
         setLayout()
         setStyle()
+        setDelegate()
         configAddTarget()
-        
-        loginView.idTextField.delegate = self
-        loginView.passwordTextField.delegate = self
     }
     
     private func setHierarchy() {
@@ -39,6 +37,14 @@ class LoginViewController: UIViewController {
     
     private func setStyle() {
         self.navigationController?.navigationBar.isHidden = true
+        
+        let tapGesture = UITapGestureRecognizer(target: self.view, action: #selector(self.view.endEditing(_:)))
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
+    private func setDelegate() {
+        loginView.idTextField.delegate = self
+        loginView.passwordTextField.delegate = self
     }
     
     private func configAddTarget() {
@@ -110,9 +116,11 @@ extension LoginViewController {
         if isValid {
             loginView.loginButton.isEnabled = true
             loginView.loginButton.backgroundColor = .red
+            loginView.loginButton.layer.borderWidth = 0
         } else {
             loginView.loginButton.isEnabled = false
-            loginView.loginButton.backgroundColor = .gray2
+            loginView.loginButton.backgroundColor = .clear
+            loginView.loginButton.setButtonBorder(radius: 3, borderWidht: 1, borderColor: UIColor.gray2.cgColor)
         }
     }
     
@@ -138,18 +146,20 @@ extension LoginViewController: makeNickNameDelegate{
 extension LoginViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == loginView.idTextField {
-             loginView.idTextField.layer.borderColor = UIColor.gray2.cgColor
-         } else if textField == loginView.passwordTextField {
-             loginView.passwordTextField.layer.borderColor = UIColor.gray2.cgColor
-         }
+            loginView.idTextField.layer.borderColor = UIColor.gray2.cgColor
+        } else if textField == loginView.passwordTextField {
+            loginView.passwordTextField.layer.borderColor = UIColor.gray2.cgColor
+            loginView.showPasswordButton.isHidden = false
+            loginView.removePassWordButton.isHidden = false
+        }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == loginView.idTextField {
-             loginView.idTextField.layer.borderColor = UIColor.black.cgColor
-         } else if textField == loginView.passwordTextField {
-             loginView.passwordTextField.layer.borderColor = UIColor.black.cgColor
-         }
+            loginView.idTextField.layer.borderColor = UIColor.black.cgColor
+        } else if textField == loginView.passwordTextField {
+            loginView.passwordTextField.layer.borderColor = UIColor.black.cgColor
+        }
     }
 }
 
