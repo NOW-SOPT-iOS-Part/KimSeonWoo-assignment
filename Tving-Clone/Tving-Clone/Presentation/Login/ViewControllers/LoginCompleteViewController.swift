@@ -35,8 +35,8 @@ class LoginCompleteViewController: UIViewController {
     
     private func configTarget() {
         loginCompleteView.nextButton.addTarget(self,
-                                              action: #selector(nextButtonTapped),
-                                              for: .touchUpInside)
+                                               action: #selector(nextButtonTapped),
+                                               for: .touchUpInside)
     }
     
     func bindData(nickName: String) {

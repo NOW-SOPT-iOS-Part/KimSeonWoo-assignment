@@ -73,7 +73,6 @@ class NickNameView: UIView {
             $0.centerX.equalToSuperview()
         }
     }
-    
 }
 
 

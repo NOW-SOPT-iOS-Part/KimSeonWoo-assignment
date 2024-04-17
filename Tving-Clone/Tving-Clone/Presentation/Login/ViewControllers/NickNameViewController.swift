@@ -39,8 +39,8 @@ class NickNameViewController: UIViewController {
     
     private func configTarget() {
         nickNameView.saveButton.addTarget(self,
-                                              action: #selector(saveButtonTapped),
-                                              for: .touchUpInside)
+                                          action: #selector(saveButtonTapped),
+                                          for: .touchUpInside)
     }
     
     private func setStyle() {
