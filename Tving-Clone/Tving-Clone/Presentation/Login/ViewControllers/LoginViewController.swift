@@ -161,5 +161,14 @@ extension LoginViewController: UITextFieldDelegate {
             loginView.passwordTextField.layer.borderColor = UIColor.black.cgColor
         }
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == loginView.idTextField {
+          loginView.passwordTextField.becomeFirstResponder()
+      } else {
+          loginView.passwordTextField.resignFirstResponder()
+      }
+      return true
+    }
 }
 
