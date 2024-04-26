@@ -160,7 +160,15 @@ class LoginView: UIView {
     }
     
     private func setHierarchy() {
-        self.addSubViews([titleLabel, idTextField, passwordTextField, loginButton, findIDButton, findPassWordButton, divideView, accountSuggestionLabel, makeNickNameButton])
+        self.addSubViews([titleLabel,
+                          idTextField,
+                          passwordTextField,
+                          loginButton,
+                          findIDButton,
+                          findPassWordButton,
+                          divideView,
+                          accountSuggestionLabel,
+                          makeNickNameButton])
         
         passwordTextField.addSubViews([showPasswordButton, removePassWordButton])
     }

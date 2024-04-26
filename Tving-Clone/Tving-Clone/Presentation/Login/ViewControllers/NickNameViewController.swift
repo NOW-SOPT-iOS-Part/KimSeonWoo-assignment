@@ -79,10 +79,3 @@ extension NickNameViewController: UITextFieldDelegate {
         }
     }
 }
-
-
-
-
-
-
-
