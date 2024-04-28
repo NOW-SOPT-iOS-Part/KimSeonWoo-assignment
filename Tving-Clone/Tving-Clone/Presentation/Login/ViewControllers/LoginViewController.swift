@@ -97,10 +97,13 @@ extension LoginViewController {
     }
     
     @objc private func textFieldChanged() {
-        if isValidID() && isValidPassword() {
-            toggleButtonStatus(isValid: true)
-        } else {
-            toggleButtonStatus(isValid: false)
+        if let idText = loginView.idTextField.text,
+           let passwordText = loginView.passwordTextField.text {
+            if idText.isValidID() && passwordText.isValidPassword() {
+                toggleButtonStatus(isValid: true)
+            } else {
+                toggleButtonStatus(isValid: false)
+            }
         }
     }
     
@@ -122,18 +125,6 @@ extension LoginViewController {
             loginView.loginButton.backgroundColor = .clear
             loginView.loginButton.setButtonBorder(radius: 3, borderWidht: 1, borderColor: UIColor.gray2.cgColor)
         }
-    }
-    
-    private func isValidID() -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluate(with: loginView.idTextField.text)
-    }
-    
-    private func isValidPassword() -> Bool {
-        let passwordRegEx = "^[a-zA-Z0-9]{8,}$"
-        let passwordTest = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)
-        return passwordTest.evaluate(with: loginView.passwordTextField.text)
     }
 }
 
@@ -164,11 +155,11 @@ extension LoginViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == loginView.idTextField {
-          loginView.passwordTextField.becomeFirstResponder()
-      } else {
-          loginView.passwordTextField.resignFirstResponder()
-      }
-      return true
+            loginView.passwordTextField.becomeFirstResponder()
+        } else {
+            loginView.passwordTextField.resignFirstResponder()
+        }
+        return true
     }
 }
 
