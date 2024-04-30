@@ -6,24 +6,35 @@
 //
 
 import UIKit
+import SnapKit
 
-class TabBarController: UITabBarController {
+final class TabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        setTabBarItem()
+        setStyle()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func setStyle() {
+        tabBar.backgroundColor = .gray5
+        tabBar.tintColor = .red
+        tabBar.barTintColor = .gray5
     }
-    */
+    
+    private func setTabBarItem() {
+        var tabBarViewControllers: [UIViewController] = []
+        
+        for item in TabBarItem.allCases {
+            guard let viewController = item.changedViewController else {
+                continue
+            }
+            viewController.tabBarItem = UITabBarItem(title: item.title, image: item.image, selectedImage: item.selectedImage)
+            tabBarViewControllers.append(viewController)
+        }
+        
+        self.viewControllers = tabBarViewControllers
+    }
 
 }

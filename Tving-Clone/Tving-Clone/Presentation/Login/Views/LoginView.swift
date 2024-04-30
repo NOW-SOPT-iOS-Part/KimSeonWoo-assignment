@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class LoginView: UIView {
+final class LoginView: UIView {
     
     private let titleLabel = UILabel().then {
         $0.font = .pretendedMediumFont(ofSize: 23)
