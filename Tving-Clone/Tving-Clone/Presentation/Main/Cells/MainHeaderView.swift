@@ -12,7 +12,7 @@ import Then
 final class MainHeaderView: UICollectionReusableView {
     static let identifier: String = "MainHeaderView"
     
-    private let titleLabel = UILabel().then {
+    var titleLabel = UILabel().then {
         $0.text = "티빙에서 꼭 봐야하는 컨텐츠"
         $0.textColor = .white
         $0.textAlignment = .center

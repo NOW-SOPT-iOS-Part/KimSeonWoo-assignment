@@ -68,6 +68,18 @@ extension MainContentViewController: UICollectionViewDataSource {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             guard let header = rootView.mainCollectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MainHeaderView.identifier, for: indexPath) as? MainHeaderView else {return UICollectionReusableView()}
+            switch MainSectionType.allCases[indexPath.section] {
+            case .RecommendedContent:
+                header.titleLabel.text = "티빙에서 꼭 봐야하는 콘텐츠"
+            case .Live:
+                header.titleLabel.text = "인기 LIVE 채널"
+            case .Paramount:
+                header.titleLabel.text = "1화 무료! 파라마운트+ 인기 시리즈"
+            case .MovieDictionary:
+                header.titleLabel.text = "마술보다 더 신비로운 영화(신비로운 영화사전님)"
+            default:
+                break
+            }
             
             return header
 
