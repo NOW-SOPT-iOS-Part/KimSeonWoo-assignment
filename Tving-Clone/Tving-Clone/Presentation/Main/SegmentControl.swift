@@ -55,22 +55,48 @@ final class UnderlineSegmentedControl: UISegmentedControl {
         updateUnderlinePosition()
     }
     
+    var index:Int = 0
+    var xOffset = 0.0
+    
     private func updateUnderlinePosition() {
         guard numberOfSegments > 0, selectedSegmentIndex >= 0, selectedSegmentIndex < numberOfSegments else {
             return
         }
-
-        let segmentWidth = bounds.width / CGFloat(numberOfSegments)
-        let selectedSegmentWidth = calculateTextWidthForSegment(at: CGFloat(selectedSegmentIndex))
-        let xOffset = (segmentWidth - selectedSegmentWidth) / 2
+        
+        if index > self.selectedSegmentIndex {
+            xOffset -= calculateTextWidthForSegment(at: CGFloat(selectedSegmentIndex)) * 0.2 + 60.0
+        } else {
+            xOffset += calculateTextWidthForSegment(at: CGFloat(selectedSegmentIndex)) * 0.2 + 60.0
+        }
+        
+        index = self.selectedSegmentIndex
+        print(index)
+        let selectedSegmentRect = self.calculateTextWidthForSegment(at: CGFloat(self.selectedSegmentIndex))
 
         UIView.animate(withDuration: 0.3) {
             self.underlineView.frame = CGRect(
-                x: xOffset + CGFloat(self.selectedSegmentIndex) * segmentWidth,
+                x: self.calculateX(index: self.index),
                 y: self.bounds.height - 2,
-                width: selectedSegmentWidth,
+                width: self.calculateTextWidthForSegment(at: CGFloat(self.selectedSegmentIndex)),
                 height: 2
             )
+        }
+    }
+    
+    private func calculateX(index: Int) -> CGFloat {
+        switch index {
+        case 0:
+            return 10.0
+        case 1:
+            return 50.0
+        case 2:
+            return 130.0
+        case 3:
+            return 225.0
+        case 4:
+            return 280.0
+        default:
+            return 10.0
         }
     }
 

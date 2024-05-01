@@ -15,18 +15,17 @@ final class MainCarouselCell: UICollectionViewCell {
     
     private var timer: Timer?
     private var currentPage: Int = 0
+    private var totalPage: Int = 0
     private var pageViews: [UIImageView] = []
     
     let scrollView = UIScrollView().then {
         $0.isPagingEnabled = true
         $0.showsHorizontalScrollIndicator = false
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.contentSize = CGSize(width: (375 * 3), height: 498)
     }
     
     let pageControl = UIPageControl().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.numberOfPages = 3
         $0.currentPage = 0
     }
     
@@ -85,8 +84,10 @@ final class MainCarouselCell: UICollectionViewCell {
     
     func bindData(data: MainDataModel) {
         pageViews.removeAll()
-
-        for i in 0..<3 {
+        totalPage = data.data.count
+        pageControl.numberOfPages = totalPage
+        scrollView.contentSize = CGSize(width: (375 * totalPage), height: 498)
+        for i in 0..<totalPage {
             let pageView = UIImageView().then {
                 $0.image = data.data[i].image
                 $0.translatesAutoresizingMaskIntoConstraints = false
@@ -99,7 +100,6 @@ final class MainCarouselCell: UICollectionViewCell {
         setConstraints()
     }
 
-    
     private func startAutoScroll() {
         timer = Timer.scheduledTimer(timeInterval: 2.5, target: self, selector: #selector(nextPage), userInfo: nil, repeats: true)
     }
@@ -110,7 +110,7 @@ final class MainCarouselCell: UICollectionViewCell {
     }
     
     @objc private func nextPage() {
-        currentPage = (currentPage + 1) % 3
+        currentPage = (currentPage + 1) % totalPage
         scrollView.setContentOffset(CGPoint(x: (UIScreen.main.bounds.width * CGFloat(currentPage)), y: 0), animated: true)
         pageControl.currentPage = currentPage
     }
@@ -120,5 +120,13 @@ extension MainCarouselCell: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         currentPage = Int(scrollView.contentOffset.x / UIScreen.main.bounds.width)
         pageControl.currentPage = currentPage
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        stopAutoScroll()
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        startAutoScroll()
     }
 }

@@ -12,9 +12,7 @@ import Then
 
 final class MainContentView: UIView {
     
-    var navigationBar = NavigationBarVIew().then {
-        $0.isHidden = false
-    }
+    var navigationBar = NavigationBarVIew()
     
     lazy var mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: Self.getLayout()).then {
         $0.showsVerticalScrollIndicator = false

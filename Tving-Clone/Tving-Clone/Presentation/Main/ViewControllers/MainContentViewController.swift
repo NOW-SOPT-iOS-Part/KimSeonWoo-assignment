@@ -100,7 +100,7 @@ extension MainContentViewController: UICollectionViewDataSource {
             guard let cell = rootView.mainCollectionView.dequeueReusableCell(withReuseIdentifier: LiveCell.identifier, for: indexPath) as? LiveCell else { return UICollectionViewCell()}
             
             let cellData = data[indexPath.section].data[indexPath.row]
-            cell.bindData(data: cellData, rank: indexPath.row)
+            cell.bindData(data: cellData, rank: indexPath.row + 1)
             return cell
             
         case .Advertise:
