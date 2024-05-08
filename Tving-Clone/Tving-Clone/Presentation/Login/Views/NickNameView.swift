@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class NickNameView: UIView {
+final class NickNameView: UIView {
     
     private let titleLabel = UILabel().then {
         $0.font = .pretendedRegularFont(ofSize: 24)

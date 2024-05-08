@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class LoginCompleteView: UIView {
+final class LoginCompleteView: UIView {
     
     var welcomeLabel = UILabel().then {
         $0.font = .pretendedMediumFont(ofSize: 23)
