@@ -11,20 +11,20 @@ import Moya
 
 final class MovieService {
     static let shared = MovieService()
-    private var userProvider = MoyaProvider<MovieTargetType>(plugins: [MoyaLoggingPlugin()])
+    private var movieProvider = MoyaProvider<MovieTargetType>(plugins: [MoyaLoggingPlugin()])
     
     private init() {}
 }
 
 extension MovieService {
-    func getUserInfo(memberId: String, completion: @escaping (NetworkResult<Any>) -> Void) {
-        userProvider.request(.getUserInfo(memberId: memberId)) { result in
+    func getUserInfo(itemPerPage: String, completion: @escaping (NetworkResult<Any>) -> Void) {
+        movieProvider.request(.getMovieData(itemPerPage: itemPerPage)) { result in
             switch result {
             case .success(let response):
                 let statusCode = response.statusCode
                 let data = response.data
                 
-                let networkResult = self.judgeStatus(by: statusCode, data, UserInfoResponseModel.self)
+                let networkResult = self.judgeStatus(by: statusCode, data, MovieResponseDTO.self)
                 completion(networkResult)
                 
             case .failure:
@@ -32,27 +32,6 @@ extension MovieService {
             }
         }
     }
-    
-    
-    func signUp(request: SignUpRequestModel, completion: @escaping (NetworkResult<Any>) -> Void) {
-        userProvider.request(.signUp(request: request)) { result in
-            switch result {
-            case .success(let response):
-                print("🫶 memberID는 \(String(describing: response.response?.allHeaderFields["Location"]))")
-                
-                let statusCode = response.statusCode
-                let data = response.data
-                
-                let networkResult = self.judgeStatus(by: statusCode, data, SignUpResponseModel.self)
-                completion(networkResult)
-                
-            case .failure:
-                completion(.networkFail)
-            }
-        }
-    }
-    
-    
     
     
     public func judgeStatus<T: Codable>(by statusCode: Int, _ data: Data, _ object: T.Type) -> NetworkResult<Any> {
@@ -73,10 +52,16 @@ extension MovieService {
     private func isValidData<T: Codable>(data: Data, _ object: T.Type) -> NetworkResult<Any> {
         let decoder = JSONDecoder()
         guard let decodedData = try? decoder.decode(T.self, from: data) else {
-            print("⛔️ \(self)애서 디코딩 오류가 발생했습니다 ⛔️")
-            return .pathErr }
-        
-        return .success(decodedData as Any)
+            print("⛔️ \(self)에서 디코딩 오류가 발생했습니다 ⛔️")
+            return .pathErr
+        }
+
+        if let movieResponseDTO = decodedData as? MovieResponseDTO {
+            let appData = movieResponseDTO.toAppData()
+            return .success(appData as Any)
+        } else {
+            return .pathErr
+        }
     }
 }
 

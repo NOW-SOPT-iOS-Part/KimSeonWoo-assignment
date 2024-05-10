@@ -14,10 +14,37 @@ protocol MainContentViewControllerDelegate: AnyObject {
 
 final class MainContentViewController: UIViewController {
     
+    private func requestUserInfo() {
+        MovieService.shared.getUserInfo(itemPerPage: "10", completion: { [weak self] response in
+            switch response {
+            case .success(let data):
+                guard let data = data as? [MainDataModel] else {
+                    return }
+                self?.data = data
+                print("🚨🚨" , self?.data)
+            case .requestErr:
+                print("요청 오류 입니다")
+            case .decodedErr:
+                print("디코딩 오류 입니다")
+            case .pathErr:
+                print("경로 오류 입니다")
+            case .serverErr:
+                print("서버 오류입니다")
+            case .networkFail:
+                print("네트워크 오류입니다")
+            }
+        })
+    }
+
+    
     weak var delegate: MainContentViewControllerDelegate?
     
     private let rootView = MainContentView()
-    private let data = MainDataModel.dummy()
+    private var data = MainDataModel.dummy() {
+        didSet {
+            rootView.mainCollectionView.reloadData()
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
@@ -29,6 +56,7 @@ final class MainContentViewController: UIViewController {
         setHierarchy()
         setLayout()
         setTarget()
+        requestUserInfo()
     }
     
     private func setHierarchy() {

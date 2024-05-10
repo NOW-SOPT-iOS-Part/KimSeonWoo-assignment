@@ -28,7 +28,7 @@ final class MoyaLoggingPlugin: PluginType {
             log.append("\(bodyString)\n")
         }
         log.append("------------------- END \(method) -------------------")
-        print(log)
+        print("📌\(log)")
     }
 
     // MARK: - Response 받을 시 호출
@@ -70,5 +70,4 @@ final class MoyaLoggingPlugin: PluginType {
         print(log)
     }
 }
-
 

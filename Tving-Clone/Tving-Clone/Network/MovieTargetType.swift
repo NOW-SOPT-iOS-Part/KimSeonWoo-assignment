@@ -9,53 +9,48 @@ import Foundation
 
 import Moya
 
+let BaseURL = Bundle.main.infoDictionary?["BASE_URL"] as! String
+let APIKey = Bundle.main.infoDictionary?["API_KEY"] as! String
 
 enum MovieTargetType {
-    case getUserInfo(memberId: String)
-    case signUp(request: SignUpRequestModel)
+    case getMovieData(itemPerPage: String)
 }
 
 extension MovieTargetType: TargetType {
+    
+
     var baseURL: URL {
-        return URL(string: Config.baseURL)!
+        return URL(string: BaseURL)!
     }
     
     var path: String {
         switch self {
-        case .signUp:
-            return "/member/join"
-        case .getUserInfo(memberId: let memberId):
-            return "/member/info"
+        case .getMovieData(let itemPerPage):
+            return "/boxoffice/searchDailyBoxOfficeList"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .signUp:
-            return .post
-        case .getUserInfo:
+        case .getMovieData:
             return .get
         }
     }
     
     var task: Moya.Task {
         switch self {
-        case .signUp(let request):
-            return .requestJSONEncodable(request)
-        case .getUserInfo:
-            return .requestPlain
+        case .getMovieData:
+            return .requestParameters(parameters:
+                                        ["key":APIKey, "targetDt":"20240501", "itemPerPage": "8"]
+            , encoding: URLEncoding.default)
         }
     }
     
     var headers: [String : String]? {
         switch self {
-        case.signUp:
-            return ["Content-Type": "application/json"]
-        case .getUserInfo(let memberId):
-            return ["Content-Type": "application/json",
-                    "memberId" : memberId]
+        case .getMovieData(let itemPerPage):
+           return ["Content-Type": "application/json"]
         }
-        
     }
 }
 
