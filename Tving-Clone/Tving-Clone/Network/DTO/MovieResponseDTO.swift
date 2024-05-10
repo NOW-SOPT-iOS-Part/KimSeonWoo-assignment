@@ -6,18 +6,15 @@
 //
 import Foundation
 
-// MARK: - Dto
 struct MovieResponseDTO: Codable {
     let boxOfficeResult: BoxOfficeResult
 }
 
-// MARK: - BoxOfficeResult
 struct BoxOfficeResult: Codable {
     let boxofficeType, showRange: String
     let dailyBoxOfficeList: [DailyBoxOfficeList]
 }
 
-// MARK: - DailyBoxOfficeList
 struct DailyBoxOfficeList: Codable {
     let rnum, rank, rankInten: String
     let rankOldAndNew: RankOldAndNew
@@ -48,9 +45,9 @@ extension MovieResponseDTO {
             let mainData = MainData(
                 image: .poster4,
                 title: boxOfficeData.movieNm,
-                maker: boxOfficeData.salesChange,
-                subTitle: boxOfficeData.salesAcc,
-                ratio: boxOfficeData.rank
+                maker: boxOfficeData.movieCd,
+                subTitle: boxOfficeData.movieCd,
+                ratio: boxOfficeData.movieCd
             )
             tempData.append(mainData)
             

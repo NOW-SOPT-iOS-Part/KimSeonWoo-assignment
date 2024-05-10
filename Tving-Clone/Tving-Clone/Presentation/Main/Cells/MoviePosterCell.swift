@@ -9,8 +9,15 @@ import UIKit
 import SnapKit
 import Then
 
+protocol MainContentCellDelegate: AnyObject {
+    func cellDidTap(code: String)
+}
+
 final class MoviePosterCell: UICollectionViewCell {
     static let identifier: String = "MoviePosterCell"
+    
+    weak var delegate: MainContentCellDelegate?
+    private var codeNumber: String = ""
     
     private lazy var movieImage = UIImageView().then {
         $0.image = .poster1
@@ -29,6 +36,8 @@ final class MoviePosterCell: UICollectionViewCell {
         
         setHierarchy()
         setLayout()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        self.addGestureRecognizer(tapGesture)
     }
     
     private func setHierarchy() {
@@ -49,5 +58,10 @@ final class MoviePosterCell: UICollectionViewCell {
     func bindData(data: MainData) {
         movieImage.image = data.image
         movieTitle.text = data.title
+        codeNumber = data.ratio
+    }
+    
+    @objc private func handleTap() {
+        delegate?.cellDidTap(code: codeNumber)
     }
 }

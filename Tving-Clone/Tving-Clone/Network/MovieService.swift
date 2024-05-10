@@ -17,14 +17,30 @@ final class MovieService {
 }
 
 extension MovieService {
-    func getUserInfo(itemPerPage: String, completion: @escaping (NetworkResult<Any>) -> Void) {
-        movieProvider.request(.getMovieData(itemPerPage: itemPerPage)) { result in
+    func getMovieInfo(completion: @escaping (NetworkResult<Any>) -> Void) {
+        movieProvider.request(.getMovieData) { result in
             switch result {
             case .success(let response):
                 let statusCode = response.statusCode
                 let data = response.data
                 
                 let networkResult = self.judgeStatus(by: statusCode, data, MovieResponseDTO.self)
+                completion(networkResult)
+                
+            case .failure:
+                completion(.networkFail)
+            }
+        }
+    }
+    
+    func getDetailInfo(code: String, completion: @escaping (NetworkResult<Any>) -> Void) {
+        movieProvider.request(.getDetailData(code: code)) { result in
+            switch result {
+            case .success(let response):
+                let statusCode = response.statusCode
+                let data = response.data
+                
+                let networkResult = self.judgeStatus(by: statusCode, data, DetailResponseDTO.self)
                 completion(networkResult)
                 
             case .failure:
@@ -58,6 +74,9 @@ extension MovieService {
 
         if let movieResponseDTO = decodedData as? MovieResponseDTO {
             let appData = movieResponseDTO.toAppData()
+            return .success(appData as Any)
+        } else if let detailResponseDTO = decodedData as? DetailResponseDTO {
+            let appData = detailResponseDTO.toAppData()
             return .success(appData as Any)
         } else {
             return .pathErr
