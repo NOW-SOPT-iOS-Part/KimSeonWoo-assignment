@@ -14,14 +14,25 @@ protocol MainContentViewControllerDelegate: AnyObject {
 
 final class MainContentViewController: UIViewController {
     
+    private var data: [MainDataModel] = [] {
+        didSet {
+            rootView.mainCollectionView.reloadData()
+        }
+    }
+
     private func requestUserInfo() {
-        MovieService.shared.getUserInfo(itemPerPage: "10", completion: { [weak self] response in
+        MovieService.shared.getUserInfo(itemPerPage: "10") { [weak self] response in
             switch response {
             case .success(let data):
-                guard let data = data as? [MainDataModel] else {
-                    return }
-                self?.data = data
-                print("🚨🚨" , self?.data)
+                if let data = data as? [MainDataModel] {
+                    // 이 부분을 옵셔널 바인딩으로 안전하게 해제합니다.
+                    self?.data = data
+                    if let data = self?.data {
+                        print("🚨🚨", data)
+                    } else {
+                        print("data가 nil입니다.")
+                    }
+                }
             case .requestErr:
                 print("요청 오류 입니다")
             case .decodedErr:
@@ -33,21 +44,22 @@ final class MainContentViewController: UIViewController {
             case .networkFail:
                 print("네트워크 오류입니다")
             }
-        })
+        }
     }
+
+
 
     
     weak var delegate: MainContentViewControllerDelegate?
     
     private let rootView = MainContentView()
-    private var data = MainDataModel.dummy() {
-        didSet {
-            rootView.mainCollectionView.reloadData()
-        }
-    }
+//    private var data = MainDataModel.dummy() {
+//
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
+        requestUserInfo()
     }
     
     override func viewDidLoad() {
@@ -56,7 +68,6 @@ final class MainContentViewController: UIViewController {
         setHierarchy()
         setLayout()
         setTarget()
-        requestUserInfo()
     }
     
     private func setHierarchy() {
@@ -127,7 +138,7 @@ extension MainContentViewController: UICollectionViewDataSource {
         case .Live:
             guard let cell = rootView.mainCollectionView.dequeueReusableCell(withReuseIdentifier: LiveCell.identifier, for: indexPath) as? LiveCell else { return UICollectionViewCell()}
             
-            let cellData = data[indexPath.section].data[indexPath.row]
+            let cellData = (data[indexPath.section].data[indexPath.row])
             cell.bindData(data: cellData, rank: indexPath.row + 1)
             return cell
             

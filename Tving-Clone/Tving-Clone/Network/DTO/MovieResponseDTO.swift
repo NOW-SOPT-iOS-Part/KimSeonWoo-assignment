@@ -25,7 +25,7 @@ struct DailyBoxOfficeList: Codable {
     let salesShare, salesInten, salesChange, salesAcc: String
     let audiCnt, audiInten, audiChange, audiAcc: String
     let scrnCnt, showCnt: String
-
+    
     enum CodingKeys: String, CodingKey {
         case rnum, rank, rankInten, rankOldAndNew
         case movieCd = "movieCd"
@@ -60,6 +60,12 @@ extension MovieResponseDTO {
                 tempData.removeAll()
             }
         }
+        
+        while mainDataModels.count < 6 {
+            mainDataModels.append(contentsOf: mainDataModels)
+        }
+        
+        mainDataModels = Array(mainDataModels.prefix(6))
         
         return mainDataModels
     }
