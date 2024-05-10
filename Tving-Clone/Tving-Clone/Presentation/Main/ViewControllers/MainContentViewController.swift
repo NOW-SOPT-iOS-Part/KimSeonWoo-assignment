@@ -56,14 +56,15 @@ final class MainContentViewController: UIViewController {
     }
     
     @objc private func handleCellTap(code: String) {
-        requestDetailInfo(code: code)
-        let detailViewController = DetailViewController()
-        detailViewController.detailView.configure(with: detailData)
-        if let presentationController = detailViewController.presentationController as? UISheetPresentationController {
-            presentationController.detents = [.medium()]
+        requestDetailInfo(code: code) { [weak self] detailData in
+            let detailViewController = DetailViewController()
+            detailViewController.detailView.configure(with: detailData)
+            if let presentationController = detailViewController.presentationController as? UISheetPresentationController {
+                presentationController.detents = [.medium()]
+            }
+            detailViewController.modalPresentationStyle = .formSheet
+            self?.present(detailViewController, animated: true)
         }
-        detailViewController.modalPresentationStyle = .formSheet
-        self.present(detailViewController, animated: true)
     }
 }
 
@@ -159,12 +160,13 @@ extension MainContentViewController: UICollectionViewDataSource {
         }
     }
     
-    private func requestDetailInfo(code: String) {
+    private func requestDetailInfo(code: String, completion: @escaping (DetailDataModel) -> Void) {
         MovieService.shared.getDetailInfo(code: code) { [weak self] response in
             switch response {
             case .success(let data):
-                if let data = data as? DetailDataModel {
-                    self?.detailData = data
+                if let detailData = data as? DetailDataModel {
+                    // 비동기 작업이 완료된 후에 클로저 내부에서 completion 블록을 호출하여 다음 작업을 실행합니다.
+                    completion(detailData)
                 }
             case .requestErr:
                 print("요청 오류 입니다")
