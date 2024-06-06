@@ -123,5 +123,7 @@ Packages
 xcuserdata
 *.xcodeproj
 
+*.xcconfig
+
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,swift,swiftpackagemanager
