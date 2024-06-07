@@ -37,13 +37,12 @@ enum RankOldAndNew: String, Codable {
 }
 
 extension MovieResponseDTO {
-    func toAppData() -> [MainDataModel] {
-        var mainDataModels: [MainDataModel] = []
+    func toDomain() -> [Content] {
+        var mainDataModels: [Content] = []
         
-        var tempData: [MainData] = []
+        var tempData: [ContentData] = []
         for (index, boxOfficeData) in boxOfficeResult.dailyBoxOfficeList.enumerated() {
-            let mainData = MainData(
-                image: .poster4,
+            let mainData = ContentData(image: "poster4",
                 title: boxOfficeData.movieNm,
                 maker: boxOfficeData.movieCd,
                 subTitle: boxOfficeData.movieCd,
@@ -52,7 +51,7 @@ extension MovieResponseDTO {
             tempData.append(mainData)
             
             if (index + 1) % 8 == 0 || index == boxOfficeResult.dailyBoxOfficeList.count - 1 {
-                let mainDataModel = MainDataModel(data: tempData)
+                let mainDataModel = Content(data: tempData)
                 mainDataModels.append(mainDataModel)
                 tempData.removeAll()
             }

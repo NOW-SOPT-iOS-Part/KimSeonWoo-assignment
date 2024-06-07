@@ -1,14 +1,13 @@
 //
-//  DetailDataModel.swift
+//  MovieDetail.swift
 //  Tving-Clone
 //
-//  Created by Seonwoo Kim on 5/10/24.
+//  Created by Seonwoo Kim on 6/7/24.
 //
 
-import UIKit
+import Foundation
 
-
-struct DetailDataModel {
+struct ContentDetail {
     var title: String
     var openDt: String
     var directors: String

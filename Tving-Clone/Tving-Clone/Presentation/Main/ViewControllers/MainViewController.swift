@@ -9,7 +9,11 @@ import UIKit
 import SnapKit
 
 final class MainViewController: UIViewController {
-    private let mainvc = MainContentViewController()
+    private let mainContentViewModel: MainContentViewModel
+
+    private lazy var mainvc: MainContentViewController = {
+        return MainContentViewController(viewModel: mainContentViewModel)
+    }()
     private let onAirVC = OnAirViewController()
     private let tvProgramVC = TVProgramViewController()
     private let movieVC = MovieViewController()
@@ -46,6 +50,16 @@ final class MainViewController: UIViewController {
             )
         }
     }
+    
+    init(mainContentViewModel: MainContentViewModel) {
+        self.mainContentViewModel = mainContentViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
           self.navigationController?.navigationBar.isHidden = true

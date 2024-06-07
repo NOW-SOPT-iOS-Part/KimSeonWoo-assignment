@@ -95,7 +95,7 @@ extension LoginViewController {
         nickNameViewController.modalPresentationStyle = .formSheet
         self.present(nickNameViewController, animated: true)
     }
-    
+        
     @objc private func textFieldChanged() {
         if let idText = loginView.idTextField.text,
            let passwordText = loginView.passwordTextField.text {

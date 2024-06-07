@@ -82,8 +82,8 @@ final class LiveCell: UICollectionViewCell {
         }
     }
     
-    func bindData(data: MainData, rank: Int) {
-        liveImageView.image = data.image
+    func bindData(data: ContentData, rank: Int) {
+        liveImageView.image = UIImage(named: data.image)
         rankLabel.text = "\(rank)"
         makerLabel.text = data.maker
         subTitleLabel.text = data.subTitle

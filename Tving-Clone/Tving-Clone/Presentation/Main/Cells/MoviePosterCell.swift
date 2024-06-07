@@ -55,8 +55,8 @@ final class MoviePosterCell: UICollectionViewCell {
         }
     }
     
-    func bindData(data: MainData) {
-        movieImage.image = data.image
+    func bindData(data: ContentData) {
+        movieImage.image = UIImage(named: data.image)
         movieTitle.text = data.title
         codeNumber = data.ratio
     }

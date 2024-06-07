@@ -10,9 +10,19 @@ import SnapKit
 
 final class TabBarController: UITabBarController {
 
+    private var mainContentViewModel: MainContentViewModel
+    
+    init(mainContentViewModel: MainContentViewModel) {
+        self.mainContentViewModel = mainContentViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setTabBarItem()
         setStyle()
     }
@@ -27,14 +37,11 @@ final class TabBarController: UITabBarController {
         var tabBarViewControllers: [UIViewController] = []
         
         for item in TabBarItem.allCases {
-            guard let viewController = item.changedViewController else {
-                continue
-            }
+            let viewController = item.changedViewController(mainContentViewModel: mainContentViewModel)
             viewController.tabBarItem = UITabBarItem(title: item.title, image: item.image, selectedImage: item.selectedImage)
             tabBarViewControllers.append(viewController)
         }
         
         self.viewControllers = tabBarViewControllers
     }
-
 }
