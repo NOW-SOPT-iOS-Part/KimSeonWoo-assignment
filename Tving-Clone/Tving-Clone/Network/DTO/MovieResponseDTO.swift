@@ -37,7 +37,7 @@ enum RankOldAndNew: String, Codable {
 }
 
 extension MovieResponseDTO {
-    func toAppData() -> [Content] {
+    func toDomain() -> [Content] {
         var mainDataModels: [Content] = []
         
         var tempData: [ContentData] = []

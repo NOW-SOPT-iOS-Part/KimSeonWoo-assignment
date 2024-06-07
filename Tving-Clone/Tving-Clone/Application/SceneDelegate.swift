@@ -19,7 +19,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let contentUseCase = DefaultContentUseCase(repository: contentRepository)
         let mainContentViewModel = MainContentViewModel(contentUseCase: contentUseCase)
         let mainContentVC = MainContentViewController(viewModel: mainContentViewModel)
-
         let tabBarController = TabBarController(mainContentViewModel: mainContentViewModel)
 
         window = UIWindow(windowScene: windowScene)

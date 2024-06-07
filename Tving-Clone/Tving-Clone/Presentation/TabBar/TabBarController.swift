@@ -5,33 +5,26 @@
 //  Created by Seonwoo Kim on 4/29/24.
 //
 
-//
-//  TabBarController.swift
-//  Tving-Clone
-//
-//  Created by Seonwoo Kim on 4/29/24.
-//
-
 import UIKit
 import SnapKit
 
 final class TabBarController: UITabBarController {
 
-    private let mainContentViewModel: MainContentViewModel
-
+    private var mainContentViewModel: MainContentViewModel
+    
     init(mainContentViewModel: MainContentViewModel) {
         self.mainContentViewModel = mainContentViewModel
         super.init(nibName: nil, bundle: nil)
-        setTabBarItem()
-        setStyle()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setTabBarItem()
+        setStyle()
     }
     
     private func setStyle() {

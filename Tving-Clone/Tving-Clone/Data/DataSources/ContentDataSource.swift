@@ -21,7 +21,7 @@ extension ContentDataSource {
                 let statusCode = response.statusCode
                 let data = response.data
                 do {
-                    let networkResult = try self.judgeStatus(by: statusCode, data, MovieResponseDTO.self).toAppData()
+                    let networkResult = try self.judgeStatus(by: statusCode, data, MovieResponseDTO.self).toDomain()
                     completion(.success(networkResult))
                 } catch {
                     completion(.failure(error))

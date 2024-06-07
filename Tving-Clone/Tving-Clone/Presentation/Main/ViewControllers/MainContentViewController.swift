@@ -63,10 +63,6 @@ final class MainContentViewController: UIViewController {
         viewModel.content.bind { [weak self] _ in
             self?.rootView.mainCollectionView.reloadData()
         }
-    }
-    
-    @objc private func handleCellTap(code: String) {
-        viewModel.fetchContentDetail(code: code)
         viewModel.contentDetail.bind { [weak self] detailData in
             guard let detailData = detailData else { return }
             let detailView = DetailView()
@@ -78,6 +74,10 @@ final class MainContentViewController: UIViewController {
             detailViewController.modalPresentationStyle = .formSheet
             self?.present(detailViewController, animated: true)
         }
+    }
+    
+    @objc private func handleCellTap(code: String) {
+        viewModel.fetchContentDetail(code: code)
     }
 }
 
@@ -151,49 +151,6 @@ extension MainContentViewController: UICollectionViewDataSource {
             return cell
         }
     }
-//    
-//    private func requestMovieInfo() {
-//        MovieService.shared.getMovieInfo { [weak self] response in
-//            switch response {
-//            case .success(let data):
-//                if let data = data as? [MainDataModel] {
-//                    self?.mainData = data
-//                }
-//            case .requestErr:            
-//                print("요청 오류 입니다")
-//            case .decodedErr:
-//                print("디코딩 오류 입니다")
-//            case .pathErr:
-//                print("경로 오류 입니다")
-//            case .serverErr:
-//                print("서버 오류입니다")
-//            case .networkFail:
-//                print("네트워크 오류입니다")
-//            }
-//        }
-//    }
-    
-//    private func requestDetailInfo(code: String, completion: @escaping (DetailDataModel) -> Void) {
-//        MovieService.shared.getDetailInfo(code: code) { [weak self] response in
-//            switch response {
-//            case .success(let data):
-//                if let detailData = data as? DetailDataModel {
-//                    // 비동기 작업이 완료된 후에 클로저 내부에서 completion 블록을 호출하여 다음 작업을 실행합니다.
-//                    completion(detailData)
-//                }
-//            case .requestErr:
-//                print("요청 오류 입니다")
-//            case .decodedErr:
-//                print("디코딩 오류 입니다")
-//            case .pathErr:
-//                print("경로 오류 입니다")
-//            case .serverErr:
-//                print("서버 오류입니다")
-//            case .networkFail:
-//                print("네트워크 오류입니다")
-//            }
-//        }
-//    }
 }
 
 extension MainContentViewController: UIScrollViewDelegate {
