@@ -10,16 +10,13 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    let appDIContainer = AppDIContainer()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
-        let contentDataSource = ContentDataSource()
-        let contentRepository = DefaultContentRepository(contentDataSource: contentDataSource)
-        let contentUseCase = DefaultContentUseCase(repository: contentRepository)
-        let mainContentViewModel = MainContentViewModel(contentUseCase: contentUseCase)
-        let mainContentVC = MainContentViewController(viewModel: mainContentViewModel)
-        let tabBarController = TabBarController(mainContentViewModel: mainContentViewModel)
+        let contentSceneDIContainer = appDIContainer.makeContentSceneDIContainer()
+        let tabBarController = contentSceneDIContainer.makeTabBarController()
 
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = UINavigationController(rootViewController: tabBarController)
