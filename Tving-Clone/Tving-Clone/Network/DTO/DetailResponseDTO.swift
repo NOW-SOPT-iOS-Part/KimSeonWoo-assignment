@@ -60,7 +60,7 @@ struct ShowType: Codable {
 }
 
 extension DetailResponseDTO {
-    func toAppData() -> DetailDataModel {
+    func toDomain() -> ContentDetail {
         let movieInfo = self.movieInfoResult.movieInfo
 
         let title = movieInfo.movieNm
@@ -70,7 +70,7 @@ extension DetailResponseDTO {
         let audits = movieInfo.audits.first?.auditNo ?? ""
         let companys = movieInfo.companys.first?.companyNm ?? ""
 
-        return DetailDataModel(
+        return ContentDetail(
             title: title,
             openDt: openDt,
             directors: directors,
