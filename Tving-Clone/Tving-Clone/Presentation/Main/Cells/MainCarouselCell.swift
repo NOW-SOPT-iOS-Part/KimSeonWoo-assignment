@@ -81,14 +81,14 @@ final class MainCarouselCell: UICollectionViewCell {
         }
     }
     
-    func bindData(data: MainDataModel) {
+    func bindData(data: Content) {
         pageViews.removeAll()
         totalPage = data.data.count
         pageControl.numberOfPages = totalPage
         scrollView.contentSize = CGSize(width: (375 * totalPage), height: 498)
         for i in 0..<totalPage {
             let pageView = UIImageView().then {
-                $0.image = data.data[i].image
+                $0.image = UIImage(named: data.data[i].image)
                 $0.translatesAutoresizingMaskIntoConstraints = false
                 $0.clipsToBounds = true
                 $0.layer.cornerRadius = 3

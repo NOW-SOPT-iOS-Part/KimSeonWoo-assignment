@@ -51,16 +51,12 @@ extension TabBarItem {
         }
     }
     
-    var changedViewController: UIViewController? {
+    func changedViewController(mainContentViewModel: MainContentViewModel) -> UIViewController {
         switch self {
         case .home:
-            MainViewController()
-        case .soon:
-            LoginViewController()
-        case .search:
-            LoginViewController()
-        case .timeline:
-            LoginViewController()
+            return MainViewController(mainContentViewModel: mainContentViewModel)
+        case .soon, .search, .timeline:
+            return LoginViewController() 
         }
     }
 }

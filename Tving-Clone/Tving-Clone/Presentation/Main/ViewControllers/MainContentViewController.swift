@@ -14,22 +14,25 @@ protocol MainContentViewControllerDelegate: AnyObject {
 
 final class MainContentViewController: UIViewController {
     
-    private var mainData: [MainDataModel] = [] {
-        didSet {
-            rootView.mainCollectionView.reloadData()
-        }
-    }
-    
-    private var detailData: DetailDataModel = DetailDataModel(title: "", openDt: "", directors: "", actors: "", audits: "", companys: "")
-    
+    private var viewModel: MainContentViewModel!
     
     weak var delegate: MainContentViewControllerDelegate?
     
     private let rootView = MainContentView()
     
+    
+    init(viewModel: MainContentViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
-        requestMovieInfo()
+        viewModel.fetchContent()
     }
     
     override func viewDidLoad() {
@@ -38,6 +41,7 @@ final class MainContentViewController: UIViewController {
         setHierarchy()
         setLayout()
         setTarget()
+        bindViewModel()
     }
     
     private func setHierarchy() {
@@ -55,10 +59,19 @@ final class MainContentViewController: UIViewController {
         }
     }
     
+    private func bindViewModel() {
+        viewModel.content.bind { [weak self] _ in
+            self?.rootView.mainCollectionView.reloadData()
+        }
+    }
+    
     @objc private func handleCellTap(code: String) {
-        requestDetailInfo(code: code) { [weak self] detailData in
-            let detailViewController = DetailViewController()
-            detailViewController.detailView.configure(with: detailData)
+        viewModel.fetchContentDetail(code: code)
+        viewModel.contentDetail.bind { [weak self] detailData in
+            guard let detailData = detailData else { return }
+            let detailView = DetailView()
+            detailView.configure(with: detailData)
+            let detailViewController = DetailViewController(detailView: detailView)
             if let presentationController = detailViewController.presentationController as? UISheetPresentationController {
                 presentationController.detents = [.medium()]
             }
@@ -73,7 +86,7 @@ extension MainContentViewController: UICollectionViewDelegate {}
 extension MainContentViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return mainData.count
+        return viewModel.content.value.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -81,7 +94,7 @@ extension MainContentViewController: UICollectionViewDataSource {
         case .MainCarousel:
             return 1
         default:
-            return mainData[section].data.count
+            return viewModel.content.value[section].data.count
         }
     }
     
@@ -114,13 +127,13 @@ extension MainContentViewController: UICollectionViewDataSource {
         case .MainCarousel:
             guard let cell = rootView.mainCollectionView.dequeueReusableCell(withReuseIdentifier: MainCarouselCell.identifier, for: indexPath) as? MainCarouselCell else { return UICollectionViewCell()}
             
-            let cellData = mainData[indexPath.section]
+            let cellData = viewModel.content.value[indexPath.section]
             cell.bindData(data: cellData)
             return cell
         case .Live:
             guard let cell = rootView.mainCollectionView.dequeueReusableCell(withReuseIdentifier: LiveCell.identifier, for: indexPath) as? LiveCell else { return UICollectionViewCell()}
             
-            let cellData = (mainData[indexPath.section].data[indexPath.row])
+            let cellData = (viewModel.content.value[indexPath.section].data[indexPath.row])
             cell.bindData(data: cellData, rank: indexPath.row + 1)
             return cell
             
@@ -132,55 +145,55 @@ extension MainContentViewController: UICollectionViewDataSource {
         case .RecommendedContent, .Paramount, .MovieDictionary:
             guard let cell = rootView.mainCollectionView.dequeueReusableCell(withReuseIdentifier: MoviePosterCell.identifier, for: indexPath) as? MoviePosterCell else { return UICollectionViewCell()}
             
-            let cellData = mainData[indexPath.section].data[indexPath.row]
+            let cellData = viewModel.content.value[indexPath.section].data[indexPath.row]
             cell.bindData(data: cellData)
             cell.delegate = self
             return cell
         }
     }
+//    
+//    private func requestMovieInfo() {
+//        MovieService.shared.getMovieInfo { [weak self] response in
+//            switch response {
+//            case .success(let data):
+//                if let data = data as? [MainDataModel] {
+//                    self?.mainData = data
+//                }
+//            case .requestErr:            
+//                print("요청 오류 입니다")
+//            case .decodedErr:
+//                print("디코딩 오류 입니다")
+//            case .pathErr:
+//                print("경로 오류 입니다")
+//            case .serverErr:
+//                print("서버 오류입니다")
+//            case .networkFail:
+//                print("네트워크 오류입니다")
+//            }
+//        }
+//    }
     
-    private func requestMovieInfo() {
-        MovieService.shared.getMovieInfo { [weak self] response in
-            switch response {
-            case .success(let data):
-                if let data = data as? [MainDataModel] {
-                    self?.mainData = data
-                }
-            case .requestErr:
-                print("요청 오류 입니다")
-            case .decodedErr:
-                print("디코딩 오류 입니다")
-            case .pathErr:
-                print("경로 오류 입니다")
-            case .serverErr:
-                print("서버 오류입니다")
-            case .networkFail:
-                print("네트워크 오류입니다")
-            }
-        }
-    }
-    
-    private func requestDetailInfo(code: String, completion: @escaping (DetailDataModel) -> Void) {
-        MovieService.shared.getDetailInfo(code: code) { [weak self] response in
-            switch response {
-            case .success(let data):
-                if let detailData = data as? DetailDataModel {
-                    // 비동기 작업이 완료된 후에 클로저 내부에서 completion 블록을 호출하여 다음 작업을 실행합니다.
-                    completion(detailData)
-                }
-            case .requestErr:
-                print("요청 오류 입니다")
-            case .decodedErr:
-                print("디코딩 오류 입니다")
-            case .pathErr:
-                print("경로 오류 입니다")
-            case .serverErr:
-                print("서버 오류입니다")
-            case .networkFail:
-                print("네트워크 오류입니다")
-            }
-        }
-    }
+//    private func requestDetailInfo(code: String, completion: @escaping (DetailDataModel) -> Void) {
+//        MovieService.shared.getDetailInfo(code: code) { [weak self] response in
+//            switch response {
+//            case .success(let data):
+//                if let detailData = data as? DetailDataModel {
+//                    // 비동기 작업이 완료된 후에 클로저 내부에서 completion 블록을 호출하여 다음 작업을 실행합니다.
+//                    completion(detailData)
+//                }
+//            case .requestErr:
+//                print("요청 오류 입니다")
+//            case .decodedErr:
+//                print("디코딩 오류 입니다")
+//            case .pathErr:
+//                print("경로 오류 입니다")
+//            case .serverErr:
+//                print("서버 오류입니다")
+//            case .networkFail:
+//                print("네트워크 오류입니다")
+//            }
+//        }
+//    }
 }
 
 extension MainContentViewController: UIScrollViewDelegate {

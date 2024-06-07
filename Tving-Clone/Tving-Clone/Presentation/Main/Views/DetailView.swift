@@ -58,7 +58,7 @@ final class DetailView: UIView {
         }
     }
     
-    func configure(with detailData: DetailDataModel) {
+    func configure(with detailData: ContentDetail) {
         let detailDataList = [
             detailData.title,
             detailData.openDt,

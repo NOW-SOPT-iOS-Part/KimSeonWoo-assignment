@@ -51,7 +51,7 @@ final class MainHeaderView: UICollectionReusableView {
         }
     }
     
-    func bindData(data: MainData) {
+    func bindData(data: ContentData) {
         titleLabel.text = data.title
     }
 }
